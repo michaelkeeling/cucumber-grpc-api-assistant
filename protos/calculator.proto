@@ -1,0 +1,72 @@
+/**
+  This is a sample proto file that we'll use for testing the Cucumber steps
+  and showing examples for how the steps can be used.
+*/
+
+syntax = "proto3";
+
+option objc_class_prefix = "CP";
+
+package calculator;
+
+service Calculator {
+    rpc UnaryOperation (UnaryRequest) returns (UnaryResponse) {}
+    rpc MultiUnaryOperation (MultiUnaryRequest) returns (MultiUnaryResponse){}
+    rpc BinaryOperation (BinaryRequest) returns (BinaryResponse) {}
+    rpc Range (RangeRequest) returns (stream RangeResponse) {}
+    rpc CurrentTime (Empty) returns (Timestamp) {}
+}
+
+message UnaryRequest {
+    int32 x = 1;
+    string operand = 2;
+}
+
+message UnaryResponse {
+    int32 x = 1;
+    string operand = 2;
+    string result = 3;
+}
+
+message BinaryRequest {
+    int32 x = 1;
+    int32 y = 2;
+    string operand = 3;
+}
+
+message BinaryResponse {
+    int32 x = 1;
+    int32 y = 2;
+    string operand = 3;
+    string result = 4;
+    bool boolean_result = 5;
+}
+
+message RangeRequest {
+    int32 s = 1;
+    int32 e = 2;
+}
+
+message RangeResponse {
+    int32 x = 1;
+    int32 numeric_result = 2;
+    bool boolean_result = 3;
+}
+
+message MultiUnaryRequest {
+    repeated int32 xs = 1;
+    string operand = 2;
+}
+
+message MultiUnaryResponse {
+    repeated int32 xs = 1;
+    string operand = 2;
+    repeated string results = 3;
+}
+
+message Empty {
+}
+
+message Timestamp {
+    uint64 ms = 1;
+}
