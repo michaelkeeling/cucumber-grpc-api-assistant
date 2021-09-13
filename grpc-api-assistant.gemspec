@@ -24,4 +24,10 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('cucumber', '~> 7.0')
   spec.add_dependency('rspec-expectations', '~> 3.10')
+
+  spec.add_development_dependency('rake')
+  spec.add_development_dependency('yard')
+  spec.add_development_dependency('yard-cucumber')
+  spec.add_development_dependency('pry')
+  spec.add_development_dependency('pry-byebug')
 end

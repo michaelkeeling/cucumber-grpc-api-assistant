@@ -32,9 +32,7 @@ task :test do
   end
 end
 
-require 'yard'
-
-task :yard_task do  
+task :yard_task do
   command = "yardoc --plugin yard-cucumber 'lib/**/*.rb' "
   sh command
 end
