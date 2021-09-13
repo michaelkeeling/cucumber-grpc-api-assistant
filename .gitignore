@@ -1,3 +1,7 @@
+Gemfile.lock
+/generated/
+
+# Some standard things to ignore
 *.gem
 *.rbc
 /.config
