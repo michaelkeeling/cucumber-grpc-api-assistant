@@ -39,13 +39,13 @@ module GrpcApiAssistant
       )
 
       @server.add_http2_port(endpoint, credentials)
-      
+
       LOGGER.info("MockGrpcServer running securely on #{endpoint}")
-      
+
       @services.each {|s| @server.handle(s)}
       @mythread = Thread.new { @server.run_till_terminated }
       @server.wait_till_running(timeout=1)
-     
+
       @@all_doubles << self
     end
 

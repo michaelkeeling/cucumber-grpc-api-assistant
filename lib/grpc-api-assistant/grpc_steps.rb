@@ -90,7 +90,7 @@ Then /^the response is an error with code '(.+)' and message '(.+)'$/ do |code, 
   expect(@grpc_response).to be_a(GRPC::BadStatus)
   expect(@grpc_response.code).to eq(code.to_i), "Unexpected error code!  Message: #{@grpc_response.message}"
   message = GrpcHelpers::instantiate_template(message_template, @stored_known_values)
-  expect(@grpc_response.message).to eq(message)
+  expect(@grpc_response.message).to include(message)
 end
 
 Then /^the '(.+)' field in the response object has a value$/ do |field_path|

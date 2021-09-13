@@ -9,7 +9,7 @@ class CalculatorService < Calculator::Calculator::Service
       else
         raise GRPC::BadStatus.new_status_exception(code = UNIMPLEMENTED, details = 'operand not implemented')
     end
-    
+
     Calculator::UnaryResponse.new(x: service_request.x,
                                   operand: service_request.operand,
                                   result: result.to_s)
@@ -18,7 +18,7 @@ class CalculatorService < Calculator::Calculator::Service
 
   def multi_unary_operation(service_request, _call)
     @received_metadata = _call.metadata
-    
+
     case service_request.operand
       when "+"
         results = service_request.xs.collect { |x| (x * 1).to_s }
@@ -28,8 +28,8 @@ class CalculatorService < Calculator::Calculator::Service
         raise GRPC::BadStatus.new_status_exception(code = UNIMPLEMENTED, details = 'operand not implemented')
     end
 
-    a = Google::Protobuf::RepeatedField.new(:string, results)
-    
+    # a = Google::Protobuf::RepeatedField.new(:string, results)
+
     Calculator::MultiUnaryResponse.new(xs: service_request.xs.to_a,
                                        operand: service_request.operand,
                                        results: results)
@@ -38,7 +38,7 @@ class CalculatorService < Calculator::Calculator::Service
 
   def binary_operation(service_request, _call)
     @received_metadata = _call.metadata
-    
+
     case service_request.operand
       when "+"
         result = service_request.x + service_request.y
@@ -49,7 +49,7 @@ class CalculatorService < Calculator::Calculator::Service
       else
         raise GRPC::BadStatus.new_status_exception(code = UNIMPLEMENTED, details = 'operand not implemented')
     end
-    
+
     Calculator::BinaryResponse.new(x: service_request.x,
                                    y: service_request.y,
                                    operand: service_request.operand,

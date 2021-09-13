@@ -50,12 +50,14 @@ end
 Before('@no_server_services_clients') do
   GrpcApiAssistant::ClientManager.clients.remove_all_clients
   GrpcApiAssistant::ServiceManager.services.remove_all_services
-  GrpcApiAssistant::SecureServer.stop_all
+  # GrpcApiAssistant::SecureServer.stop_all
+  GrpcApiAssistant::InsecureServer.stop_all
 end
 
 After do |scenario|
   GrpcApiAssistant::ClientManager.clients.remove_all_clients
   GrpcApiAssistant::ServiceManager.services.remove_all_services
   GrpcApiAssistant::ServerManager.servers.remove_all_servers
-  GrpcApiAssistant::SecureServer.stop_all
+  # GrpcApiAssistant::SecureServer.stop_all
+  GrpcApiAssistant::InsecureServer.stop_all
 end
