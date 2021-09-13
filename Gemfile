@@ -8,5 +8,8 @@ gem 'rake'
 group :development do
   gem 'yard'
   gem 'yard-cucumber'
+
+  gem 'pry'
+  gem 'pry-byebug'
 end
 
