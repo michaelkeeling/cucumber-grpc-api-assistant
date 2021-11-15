@@ -1,3 +1,6 @@
+require 'yard'
+require 'rake/clean'
+
 task default: [:package_gem, :yard_task]
 task package_gem: [:test]
 task test: [:generate_grpc]
@@ -11,7 +14,7 @@ task :package_gem do
 end
 
 task :generate_grpc do
-  proto_dir = "./protos"
+  proto_dir = "protos"
   dest_root = "generated/proto"
   FileUtils.mkdir_p(dest_root) unless File.exists?(dest_root)
 
@@ -36,8 +39,6 @@ task :yard_task do
   command = "yardoc --plugin yard-cucumber 'lib/**/*.rb' "
   sh command
 end
-
-require 'rake/clean'
 
 CLEAN.include 'logs'
 CLEAN.include '*.gem'
