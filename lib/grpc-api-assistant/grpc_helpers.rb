@@ -46,7 +46,7 @@ module GrpcHelpers
 
 
   def self.instantiate_template(template, known_values)
-    result = template
+    result = template.gsub("{RANDOM()}") {|v| SecureRandom.uuid}
     known_values.each {|k, v| result = result.gsub("{" + k + "}", v.to_s)}
     result
   end
