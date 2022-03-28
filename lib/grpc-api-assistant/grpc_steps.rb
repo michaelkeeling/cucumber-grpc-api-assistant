@@ -237,6 +237,6 @@ Then /^the '(.+)' field in the response object is false$/ do |field_path|
   expect(value).not_to be
 end
 
-Given(/^I wait (\d+) millisecond(?:s)?$/) do |seconds|
-  sleep(seconds)
+Given(/^I wait (\d+) millisecond(?:s)?$/) do |ms|
+  sleep(ms / 1000)
 end
