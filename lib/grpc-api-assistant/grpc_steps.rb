@@ -8,10 +8,10 @@ end
 
 Given /^the value '(.*)' is saved in a key called '(.+)'$/ do |value, name|
   if value.downcase == "time.now"
-    value = Time.now.utc.iso8601
+    value = Time.now.strftime("%s")
   end
 
-  @stored_known_values[name] = value
+  @stored_known_values[name] = value.gsub("CURRENT_TIME()") {|v| Time.now.utc.iso8601}
 end
 
 Given /^(\d+) times the value (-?\d+) is saved in a key called '(.+)'$/ do |multiplier, value, key_name|
@@ -130,17 +130,11 @@ Then /^the '(.+)' field in the response object has a timestamp at least (\d+) mi
 end
 
 Then(/^the '(.+)' field in the response object has a timestamp less than (\d+) seconds old$/) do |field_path, seconds|
-  expect(@grpc_response).not_to be nil
-  expect(@grpc_response).not_to be_a(GRPC::BadStatus)
-  value = GrpcHelpers.fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value).to be_within(seconds.to_i).of(Time.now.to_i)
+  step "the '#{field_path}' in the response object has a timestamp less than #{seconds * 1000} milliseconds old"
 end
 
 Then(/^the '(.+)' field in the response object has a timestamp at least (\d+) seconds old$/) do |field_path, seconds|
-  expect(@grpc_response).not_to be nil
-  expect(@grpc_response).not_to be_a(GRPC::BadStatus)
-  value = GrpcHelpers.fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value).not_to be_within(seconds.to_i).of(Time.now.to_i)
+  step "the '#{field_path}' in the response object has a timestamp at least #{seconds * 1000} milliseconds old"
 end
 
 Then /^the '(.+)' field in the response object is less than '(\d+)'$/ do |field_path, expected_value|
@@ -243,6 +237,6 @@ Then /^the '(.+)' field in the response object is false$/ do |field_path|
   expect(value).not_to be
 end
 
-Given(/^I wait (\d+) second(?:s)?$/) do |seconds|
+Given(/^I wait (\d+) millisecond(?:s)?$/) do |seconds|
   sleep(seconds)
 end
