@@ -6,12 +6,12 @@ Given /^a key called '(.+)' has a known value$/ do |name|
   @stored_known_values[name] = Helpers.get_env(name) || name + "_" + SecureRandom.uuid
 end
 
-Given /^the value '(.+)' is saved in a key called '(.+)'$/ do |value, name|
+Given /^the value '(.*)' is saved in a key called '(.+)'$/ do |value, name|
   if value.downcase == "time.now"
     value = Time.now.strftime("%s")
   end
 
-  @stored_known_values[name] = value
+  @stored_known_values[name] = value.gsub("CURRENT_TIME()") { Time.now.utc.iso8601 }
 end
 
 Given /^(\d+) times the value (-?\d+) is saved in a key called '(.+)'$/ do |multiplier, value, key_name|
@@ -122,6 +122,20 @@ Then /^the '(.+)' field in the response object has a timestamp less than (\d+) m
   expect(value).to be_within(ms.to_i).of(Time.now.to_i * 1000)
 end
 
+Then /^the '(.+)' field in the response object has a timestamp at least (\d+) milliseconds old$/ do |field_path, ms|
+  expect(@grpc_response).not_to be nil
+  expect(@grpc_response).not_to be_a(GRPC::BadStatus)
+  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value).not_to be_within(ms.to_i).of(Time.now.to_i * 1000)
+end
+
+Then(/^the '(.+)' field in the response object has a timestamp less than (\d+) seconds old$/) do |field_path, seconds|
+  step "the '#{field_path}' in the response object has a timestamp less than #{seconds * 1000} milliseconds old"
+end
+
+Then(/^the '(.+)' field in the response object has a timestamp at least (\d+) seconds old$/) do |field_path, seconds|
+  step "the '#{field_path}' in the response object has a timestamp at least #{seconds * 1000} milliseconds old"
+end
 
 Then /^the '(.+)' field in the response object is less than '(\d+)'$/ do |field_path, expected_value|
   expect(@grpc_response).not_to be nil
@@ -221,4 +235,8 @@ Then /^the '(.+)' field in the response object is false$/ do |field_path|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
   expect(value).not_to be
+end
+
+Given(/^I wait (\d+) millisecond(?:s)?$/) do |ms|
+  sleep(ms / 1000)
 end
