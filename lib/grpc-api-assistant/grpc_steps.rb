@@ -11,7 +11,7 @@ Given /^the value '(.*)' is saved in a key called '(.+)'$/ do |value, name|
     value = Time.now.strftime("%s")
   end
 
-  @stored_known_values[name] = value.gsub("CURRENT_TIME()") {|v| Time.now.utc.iso8601}
+  @stored_known_values[name] = value.gsub("CURRENT_TIME()") { Time.now.utc.iso8601 }
 end
 
 Given /^(\d+) times the value (-?\d+) is saved in a key called '(.+)'$/ do |multiplier, value, key_name|
