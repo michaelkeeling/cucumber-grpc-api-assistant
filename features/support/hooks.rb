@@ -1,27 +1,29 @@
+# frozen_string_literal: true
+
 Before do |scenario|
   calculator_service = GrpcApiAssistant::ServiceManager.services.add_service(
-    "Calculator",       # The name you plan to use to reference the service from within test steps
-    "CalculatorService" # This is the name of the generated gRPC service
+    'Calculator',       # The name you plan to use to reference the service from within test steps
+    'CalculatorService' # This is the name of the generated gRPC service
   )
 
   # calculator_server = GrpcApiAssistant::SecureServer.new(
-  #     "0.0.0.0",
+  #     '0.0.0.0',
   #     12345,
-  #     Helpers.get_env("PRIVATE_KEY_PASSPHRASE"),
-  #     "server.crt",
-  #     "ca.crt",
-  #     "server.pem",
+  #     Helpers.get_env('PRIVATE_KEY_PASSPHRASE'),
+  #     'server.crt',
+  #     'ca.crt',
+  #     'server.pem',
   #     *calculator_service
   # )
 
   calculator_server = GrpcApiAssistant::InsecureServer.new(
-    "0.0.0.0",
+    '0.0.0.0',
     12345,
     *calculator_service
   )
 
   GrpcApiAssistant::ServerManager.servers.add_server(
-    "calculator_server", # A name you will use to reference this server from within test steps
+    'calculator_server', # A name you will use to reference this server from within test steps
     calculator_server    # The GrpcApiAssistant::Server or SecureServer
   )
 
@@ -29,22 +31,21 @@ Before do |scenario|
 
   # create a secure client
   # GrpcApiAssistant::ClientManager.clients.add_client(
-  #     "Calculator",
-  #     "::Calculator::Calculator",
-  #     "localhost",
+  #     'Calculator',
+  #     '::Calculator::Calculator',
+  #     'localhost',
   #     12345,
   #     nil,
-  #     "server.crt",
-  #     "CHANNEL_NAME"
+  #     'server.crt',
+  #     'CHANNEL_NAME'
   # )
 
   GrpcApiAssistant::ClientManager.clients.add_client(
-      "Calculator",
-      "::Calculator::Calculator",
-      "localhost",
-      12345
+    'Calculator',
+    '::Calculator::Calculator',
+    'localhost',
+    12345
   )
-
 end
 
 Before('@no_server_services_clients') do
