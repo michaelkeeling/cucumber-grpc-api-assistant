@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rake', '~> 13.0')
   spec.add_development_dependency('yard', '~> 0.9')
   spec.add_development_dependency('yard-cucumber', '~> 2.2')
-  spec.add_development_dependency('pry')
-  spec.add_development_dependency('pry-byebug')
+  spec.add_development_dependency('pry', '~> 0.13')
+  spec.add_development_dependency('pry-byebug', '~> 3.9')
 end
