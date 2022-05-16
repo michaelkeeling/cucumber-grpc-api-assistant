@@ -24,17 +24,16 @@ Feature: Do service addition testing
     And I add a client with name 'MyCalculator', package name '::Calculator::Calculator', host 'localhost', port 12345
     And I reset the server 'calculator_server' with service 'MyCalculator'
     When I call the 'binary_operation' method in the MyCalculator service with an 'BinaryRequest' that looks like
-    """
-    {
-      "x": 2,
-      "y": 3,
-      "operand": "=="
-    }
-    """
+      """
+      {
+        "x": 2,
+        "y": 3,
+        "operand": "=="
+      }
+      """
     Then the 'boolean_result' field in the response object is false
     And the service with name 'MyCalculator' is stored in services
     And the client with name 'MyCalculator' is stored in the clients
-
 
   Scenario: Add an additional mock service
     Given I add the service 'CalculatorService' with name AnotherCalculator
