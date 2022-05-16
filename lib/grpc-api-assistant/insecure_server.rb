@@ -16,7 +16,6 @@ module GrpcApiAssistant
       @services = services
     end
 
-
     def start
       @server = GRPC::RpcServer.new
       endpoint = "#{@host}:#{@port}"
@@ -32,17 +31,14 @@ module GrpcApiAssistant
       @@all_doubles << self
     end
 
-
     def stop
       @server.stop if @server and @server.running?
       @mythread.kill if @mythread
       @@all_doubles.delete(self)
     end
 
-
     def self.stop_service(name)
     end
-
 
     def self.stop_all
       @@all_doubles.compact.each {|m| m.stop}

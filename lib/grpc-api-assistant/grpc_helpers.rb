@@ -1,7 +1,6 @@
 require 'grpc-api-assistant/test_logger'
 
 module GrpcHelpers
-
   LOGGER = GrpcApiAssistant::TestLogger
 
   def self.create_message(message_name, template, template_values)
@@ -9,14 +8,12 @@ module GrpcHelpers
     LOGGER.debug json
     Object::const_get(message_name).decode_json(json)
   end
-  
 
   def self.create_array(message_name, array_json, template_values)
     json = self.instantiate_template(array_json, template_values)
     array = JSON.parse(json, symbolize_names: true)
-    array.map {|hash| Object::const_get(message_name).decode_json(JSON.generate(hash))}
+    array.map { |hash| Object::const_get(message_name).decode_json(JSON.generate(hash)) }
   end
-
 
   def self.call(client, method, request, metadata)
     metadata = {:metadata => metadata}
@@ -26,7 +23,6 @@ module GrpcHelpers
   rescue => error
     error
   end
-
 
   def self.fetch_from_grpc_with_shorthand(field_path, message)
     fields = field_path.split("/")
@@ -43,7 +39,6 @@ module GrpcHelpers
     end
     value
   end
-
 
   def self.instantiate_template(template, known_values)
     result = template.gsub("{RANDOM()}") { SecureRandom.uuid }

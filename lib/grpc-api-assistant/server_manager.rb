@@ -1,7 +1,7 @@
 module GrpcApiAssistant
   module ServerManager
     extend self
-  
+
     class Servers
       def self.instance
         @__instance__ ||= new
@@ -11,14 +11,12 @@ module GrpcApiAssistant
         @servers = Hash.new
       end
 
-
       def add_server(server_name, server)
         if @servers.key? server_name
           raise "already added a server by this name #{server_name}"
         end
         @servers[server_name] = server
       end
-
 
       def get_server(server_name)
         unless @servers.key?(server_name)
@@ -27,21 +25,17 @@ module GrpcApiAssistant
         @servers[server_name]
       end
 
-
       def get_servers
         @servers
       end
-
 
       def remove_server(server_name)
         @servers.delete(server_name)
       end
 
-
       def remove_all_servers
         @servers.clear
       end
-
 
       def reset_server(server_name, service_name)
         server = @servers[server_name]
