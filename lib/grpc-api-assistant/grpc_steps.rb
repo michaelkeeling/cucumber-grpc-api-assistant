@@ -31,7 +31,8 @@ end
 
 Given 'the grpc metadata keys and values are set as' do |table|
   table.hashes.each do |row|
-    @grpc_metadata[row[:key]] = row[:value]
+    value = GrpcHelpers::instantiate_template(row[:value], @stored_known_values)
+    @grpc_metadata[row[:key]] = value
   end
 end
 

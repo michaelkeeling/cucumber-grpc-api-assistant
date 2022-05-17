@@ -1,7 +1,23 @@
 Feature: Basic gRPC step functions
 
-  This feature will be used to provide generic service testing
-  for the grpc-api-assistant gem.
+  This gem provides a set of basic steps that can be used to drive a gRPC API
+  and check the results.
+
+  There are three ways to make a gRPC request.
+
+  1. Call the rpc in a single step.  This is demonstrated in the scenario,
+  "Check a whole response object value"
+  2. Call the rpc in two steps.  The first step defines the shape of the
+  request object, while the second step uses that request object.  This is
+  demonstrated in the scenario "Matchers for checking result values".
+  3. Call the rpc using a stored template, which holds the request object.
+  The stored template can be defined at any point (in the current test
+  context) before it is used.  The template is referenced by name when using
+  it.  This is demonstrated in the scenario "Call method using a template"
+
+  A variety of step functions allow you to check for errors or values in the
+  response. These are demonstrated throughout the scenarios.
+
 
   Background:
     Given the package prefix is 'Calculator::'
@@ -40,7 +56,7 @@ Feature: Basic gRPC step functions
     And the 'result' field in the response object is the same as the value stored in the key 'result_value'
 
   Scenario: Checking error responses
-    Given I call the 'binary_operation' method in the Calculator service with an 'BinaryRequest' that looks like
+    Given I call the 'binary_operation' method in the Calculator service with a 'BinaryRequest' that looks like
       """
       {
         "x": 2,
@@ -51,8 +67,8 @@ Feature: Basic gRPC step functions
     Then the response is an error with code 12 and message '12:operand not implemented'
     And the response gives the error code 12
 
-  Scenario: Check a whole response object value
-    Given I call the 'binary_operation' method in the Calculator service with an 'BinaryRequest' that looks like
+  Scenario: Check a whole response object value, boolean, or empty values
+    Given I call the 'binary_operation' method in the Calculator service with a 'BinaryRequest' that looks like
       """
       {
         "x": 2,
@@ -71,20 +87,10 @@ Feature: Basic gRPC step functions
       }
       """
     And the 'result' field in the response object is empty
-
-  Scenario: Check for false values
-    Given I call the 'binary_operation' method in the Calculator service with an 'BinaryRequest' that looks like
-      """
-      {
-        "x": 2,
-        "y": 3,
-        "operand": "=="
-      }
-      """
-    Then the 'boolean_result' field in the response object is false
+    And the 'boolean_result' field in the response object is false
 
   Scenario: Check for true values
-    Given I call the 'binary_operation' method in the Calculator service with an 'BinaryRequest' that looks like
+    Given I call the 'binary_operation' method in the Calculator service with a 'BinaryRequest' that looks like
       """
       {
         "x": 5,
