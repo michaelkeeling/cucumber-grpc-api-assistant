@@ -68,7 +68,7 @@ class CalculatorService < Calculator::Calculator::Service
 
   def current_time(request, _call)
     @received_metadata = _call.metadata
-    Calculator::Timestamp.new(ms: 1000 * Time.now.to_i)
+    Calculator::Timestamp.new(ms: (1000 * Time.now.to_f).to_i)
   end
 
   def get_metadata(key)

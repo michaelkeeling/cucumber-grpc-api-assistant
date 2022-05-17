@@ -6,16 +6,16 @@ Given /^a key called '(.+)' has a known value$/ do |name|
   @stored_known_values[name] = Helpers.get_env(name) || name + "_" + SecureRandom.uuid
 end
 
-Given /^the value '(.*)' is saved in a key called '(.+)'$/ do |value, name|
+Given 'the value {int} is saved in a key called {string}' do |value, name|
+  @stored_known_values[name] = value
+end
+
+Given 'the value {string} is saved in a key called {string}' do |value, name|
   if value.downcase == "time.now"
     value = Time.now.strftime("%s")
   end
 
   @stored_known_values[name] = value.gsub("CURRENT_TIME()") { Time.now.utc.iso8601 }
-end
-
-Given /^(\d+) times the value (-?\d+) is saved in a key called '(.+)'$/ do |multiplier, value, key_name|
-  step "the value '#{value.to_i * multiplier.to_i}' is saved in a key called '#{key_name}'"
 end
 
 Given /^an? '(.+)' that looks like the following$/ do |message_name, json|
@@ -47,10 +47,14 @@ Given /^the value '(.+)' is saved in a stored known values with a key called '(.
   @stored_known_values[key] = value
 end
 
-When /^the value of '(.+)' in the response object is saved in a key called '(.+)'$/ do |field_path, key_name|
+Given 'I wait {int} millisecond(s)' do |ms|
+  sleep(ms / 1000)
+end
+
+When 'the value of {string} in the response object is saved in a key called {string}' do |field_path, key_name|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  step "the value '#{value}' is saved in a stored known values with a key called '#{key_name}'"
+  @stored_known_values[key_name] = value
 end
 
 When /^I call the '(.+)' method in the (.+) service with an? '(.+)' that looks like$/ do |method, service_name, message_name, template|
@@ -89,7 +93,7 @@ Then /^the response is an error with code '(.+)' and message '(.+)'$/ do |code, 
   expect(@grpc_response.message).to include(message)
 end
 
-Then /^the '(.+)' field in the response object has a value$/ do |field_path|
+Then 'the {string} field in the response object has a value' do |field_path|
   expect(@grpc_response).not_to be nil
   expect(@grpc_response).not_to be_a(GRPC::BadStatus)
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
@@ -97,62 +101,79 @@ Then /^the '(.+)' field in the response object has a value$/ do |field_path|
   expect(value.empty?).to be false if value.respond_to?(:empty?)
 end
 
-Then /^the '(.+)' field in the response object has (\d+) values?$/ do |field_path, count|
+Then 'the {string} field in the response object has {int} value(s)' do |field_path, count|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
   expect(value.kind_of?(Google::Protobuf::RepeatedField) || value.is_a?(Array)).to be_truthy, "expected an Array, got a #{value.class}"
   expect(value.size).to eq count.to_i
 end
 
-
-Then /^the '(.+)' field in the response object has a recent millisecond timestamp$/ do |field_path|
+Then 'the {string} field in the response object has a recent millisecond timestamp' do |field_path|
   step "the '#{field_path}' field in the response object has a timestamp less than 5000 milliseconds old"
 end
 
-Then /^the '(.+)' field in the response object has a timestamp less than (\d+) milliseconds old$/ do |field_path, ms|
+Then 'the {string} field in the response object has a timestamp less than {int} millisecond(s) old' do |field_path, ms|
   expect(@grpc_response).not_to be nil
   expect(@grpc_response).not_to be_a(GRPC::BadStatus)
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value).to be_within(ms.to_i).of(Time.now.to_i * 1000)
+  expect(value).to be_within(ms).of(Time.now.to_f * 1000)
 end
 
-Then /^the '(.+)' field in the response object has a timestamp at least (\d+) milliseconds old$/ do |field_path, ms|
+Then 'the {string} field in the response object has a timestamp at least {int} millisecond(s) old' do |field_path, ms|
   expect(@grpc_response).not_to be nil
   expect(@grpc_response).not_to be_a(GRPC::BadStatus)
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value).not_to be_within(ms.to_i).of(Time.now.to_i * 1000)
+  expect(value).not_to be_within(ms).of(Time.now.to_f * 1000)
 end
 
-Then(/^the '(.+)' field in the response object has a timestamp less than (\d+) seconds old$/) do |field_path, seconds|
-  step "the '#{field_path}' in the response object has a timestamp less than #{seconds * 1000} milliseconds old"
+Then 'the {string} field in the response object has a timestamp less than {int} second(s) old' do |field_path, seconds|
+  step "the '#{field_path}' field in the response object has a timestamp less than #{seconds * 1000} milliseconds old"
 end
 
-Then(/^the '(.+)' field in the response object has a timestamp at least (\d+) seconds old$/) do |field_path, seconds|
-  step "the '#{field_path}' in the response object has a timestamp at least #{seconds * 1000} milliseconds old"
+Then 'the {string} field in the response object has a timestamp at least {int} second(s) old' do |field_path, seconds|
+  step "the '#{field_path}' field in the response object has a timestamp at least #{seconds * 1000} milliseconds old"
 end
 
-Then /^the '(.+)' field in the response object is less than '(\d+)'$/ do |field_path, expected_value|
+Then 'the {string} field in the response object is less than {int}' do |field_path, expected_value|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value.to_f < expected_value.to_f).to be true
+  expect(value.to_f).to be < expected_value
 end
 
-Then /^the '(.+)' field in the response object is greater than '(\d+)'$/ do |field_path, expected_value|
+Then 'the {string} field in the response object is greater than {int}' do |field_path, expected_value|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value.to_f > expected_value.to_f).to be true
+  expect(value.to_f).to be > expected_value
 end
 
-Then /^the '(.+)' field in the response object is '(.+)'$/ do |field_path, expected_value|
+Then 'the {string} field in the response object is {int}' do |field_path, expected_value|
+  expect(@grpc_response).not_to be nil
+  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value.to_f).to eq expected_value
+end
+
+Then 'the {string} field in the response object is {string}' do |field_path, expected_value|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
   expect(value.to_s).to eq expected_value
 end
 
-Then /^the '(.+)' field in the response object is not '(.+)'$/ do |field_path, expected_value|
+Then 'the {string} field in the response object is not {int}' do |field_path, expected_value|
+  expect(@grpc_response).not_to be nil
+  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value.to_f).not_to eq expected_value
+end
+
+Then 'the {string} field in the response object is not {string}' do |field_path, expected_value|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
   expect(value.to_s).not_to eq expected_value
+end
+
+Then 'the {string} field in the response object is {boolean}' do |field_path, expected_value|
+  expect(@grpc_response).not_to be nil
+  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value).to eq expected_value
 end
 
 Then /^the '(.+)' field in the response object contains the substring '(.+)'$/ do |field_path, expected_value|
@@ -193,31 +214,16 @@ Then /^the '(.+)' field in the response object is empty$/ do |field_path|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
   expect(value.empty?).to be true if value.respond_to?(:empty?)
+  expect(value.size).to eq 0 if value.respond_to?(:size)
 end
 
-Then /^the '(.+)' field in the response object is the same as the value stored in the key '(.+)'$/ do |field_path, key_name|
+Then 'the {string} field in the response object is the same as the value stored in the key {string}' do |field_path, key_name|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value.to_s).to eq @stored_known_values[key_name]
+  expect(value.to_s).to eq @stored_known_values[key_name].to_s
 end
 
 Then /^the response stream has (\d+) messages?$/ do |count|
   expect(@grpc_response).not_to be nil
   expect(@grpc_response.size).to eq count.to_i
-end
-
-Then /^the '(.+)' field in the response object is true$/ do |field_path|
-  expect(@grpc_response).not_to be nil
-  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value).to be
-end
-
-Then /^the '(.+)' field in the response object is false$/ do |field_path|
-  expect(@grpc_response).not_to be nil
-  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  expect(value).not_to be
-end
-
-Given(/^I wait (\d+) millisecond(?:s)?$/) do |ms|
-  sleep(ms / 1000)
 end
