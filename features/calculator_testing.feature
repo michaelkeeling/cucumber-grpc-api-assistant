@@ -24,7 +24,7 @@ Feature: Basic gRPC step functions
     And the 'result' field in the response object contains the substring '-'
     And the 'result' field in the response object is less than 0
     And the 'result' field in the response object is greater than -100
-    And the 'result' field in the response object has a value in the list '5,-6'
+    And the 'result' field in the response object has a value in the list [5,-6]
 
   Scenario: Call method using a template
     Given a 'BinaryRequest' message template named 'binary' that looks like
@@ -48,8 +48,8 @@ Feature: Basic gRPC step functions
         "operand": "%"
       }
       """
-    Then the response is an error with code '12' and message '12:operand not implemented'
-    And the response gives the error code '12'
+    Then the response is an error with code 12 and message '12:operand not implemented'
+    And the response gives the error code 12
 
   Scenario: Check a whole response object value
     Given I call the 'binary_operation' method in the Calculator service with an 'BinaryRequest' that looks like
@@ -161,7 +161,7 @@ Feature: Basic gRPC step functions
     When I call the 'multi_unary_operation' method in the Calculator service
     Then the response object is not an error
     And the 'results' field in the response object has 3 values
-    And the 'results' field in the response object matches '["-1", "-5", "-3"]' as a set
+    And the 'results' field in the response object matches ["-1", "-5", "-3"] as a set
     And the 'results/0' field in the response object is '-1'
     And the 'results/0' field in the response object is not '1000'
     And the 'foo' field in the response object is empty
