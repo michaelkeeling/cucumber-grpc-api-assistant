@@ -31,7 +31,7 @@ Feature: Managing Services and Clients
 
   @no_server_services_clients
   Scenario: Add a mock service and start the mock server dynamically
-    Given I add the service 'CalculatorService' with name MyCalculator
+    Given I add the service 'CalculatorService' with name 'MyCalculator'
     # And I add a client with name 'MyCalculator', package name '::Calculator::Calculator', host 'localhost', port 12345, service_endpoint 'nil', cred 'server.crt', and channel 'CHANNEL_NAME'
     And I add a client with name 'MyCalculator', package name '::Calculator::Calculator', host 'localhost', port 12345
     And I reset the server 'calculator_server' with service 'MyCalculator'
@@ -48,7 +48,7 @@ Feature: Managing Services and Clients
     And the client with name 'MyCalculator' is stored in the clients
 
   Scenario: Add an additional mock service
-    Given I add the service 'CalculatorService' with name AnotherCalculator
+    Given I add the service 'CalculatorService' with name 'AnotherCalculator'
     # And I add a client with name 'MyCalculator', package name '::Calculator::Calculator', host 'localhost', port 12345, service_endpoint 'nil', cred 'server.crt', and channel 'CHANNEL_NAME'
     And I add a client with name 'MyCalculator', package name '::Calculator::Calculator', host 'localhost', port 12345
     Then there are 2 services stored

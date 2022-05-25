@@ -12,8 +12,6 @@ Feature: Working with Metadata
   Like message templates, it's possible to substitute a particular metadata
   value at runtime from a stored variable.
 
-
-
   Background:
     Given the package prefix is 'Calculator::'
 
