@@ -15,7 +15,7 @@ Given /^I clear the services$/ do
 end
 
 Given /^I remove the server with name '(.+)'$/ do |server_name|
-  GrpcApiAssistant::ServiceManager.services.remove_server(server_name)
+  GrpcApiAssistant::ServerManager.servers.remove_server(server_name)
 end
 
 Given /^I clear the servers$/ do
@@ -103,6 +103,10 @@ Then /^the server with name '(.+)' is not stored in the servers$/ do |server_nam
   else
     expect(true).to be false
   end
+end
+
+Then 'there is 1 server stored' do
+  step "there are 1 servers stored"
 end
 
 Then /^there are (\d+) servers stored$/ do |count|
