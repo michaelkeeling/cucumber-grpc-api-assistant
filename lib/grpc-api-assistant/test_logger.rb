@@ -23,7 +23,6 @@ module GrpcApiAssistant
       create_logger().each {|l| l.info(message)}
     end
 
-
     def self.create_logger()
       @@loggers ||= []
 

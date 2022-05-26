@@ -14,7 +14,7 @@ task :package_gem do
 end
 
 task :generate_grpc do
-  proto_dir = "protos"
+  proto_dir = "./protos"
   dest_root = "generated/proto"
   FileUtils.mkdir_p(dest_root) unless File.exists?(dest_root)
 
@@ -33,6 +33,10 @@ task :test do
   if $?.exitstatus != 0
     fail "Command #{command} failed!"
   end
+end
+
+task :yard do
+  Rake::Task["yard_task"].invoke
 end
 
 task :yard_task do
