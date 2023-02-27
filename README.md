@@ -11,7 +11,7 @@ Features
 
 ## Prerequisites
 
-- Ruby 2.5.7
+- Ruby 3.0
 - Bundler gem
 
 ## Installing and Running

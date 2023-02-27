@@ -15,19 +15,17 @@ Gem::Specification.new do |spec|
 
   spec.files = `git ls-files`.split("\n")
   spec.require_paths = ["lib"]
-  spec.required_ruby_version = '>= 2.5.7'
+  spec.required_ruby_version = '>= 3.0.0'
   spec.license = 'MIT'
 
-  spec.add_dependency('grpc', '~> 1.38')
-  spec.add_dependency('grpc-tools', '~> 1.40')
-  spec.add_dependency('net-ssh', '~> 6.1')
+  spec.add_dependency('grpc', '~> 1.52')
+  spec.add_dependency('grpc-tools', '~> 1.51')
+  spec.add_dependency('net-ssh', '~> 7.0')
 
-  spec.add_dependency('cucumber', '~> 7.0')
-  spec.add_dependency('rspec-expectations', '~> 3.10')
+  spec.add_dependency('cucumber', '~> 8.0')
+  spec.add_dependency('rspec-expectations', '~> 3.12')
 
   spec.add_development_dependency('rake', '~> 13.0')
-  spec.add_development_dependency('yard', '~> 0.9')
-  spec.add_development_dependency('yard-cucumber', '~> 2.2')
-  spec.add_development_dependency('pry', '~> 0.13')
-  spec.add_development_dependency('pry-byebug', '~> 3.9')
+  spec.add_development_dependency('pry', '~> 0.14')
+  spec.add_development_dependency('pry-byebug', '~> 3.10')
 end
