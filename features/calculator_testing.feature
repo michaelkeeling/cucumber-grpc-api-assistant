@@ -152,6 +152,22 @@ Feature: Basic gRPC step functions
     And I wait 1000 milliseconds
     And the 'ms' field in the response object has a timestamp at least 1 second old
 
+    Given I call the 'echo_time' method in the Calculator service with a 'TimeRequest' that looks like
+      """
+      {
+        "timestamp": "2023-10-31T01:03:05Z"
+      }      
+      """
+    Then the 'timestamp' field in the response object has a timestamp equal to '2023-10-31T01:03:05Z'
+
+    Given I call the 'echo_time' method in the Calculator service with a 'TimeRequest' that looks like
+      """
+      {
+
+      }      
+      """
+    Then the 'timestamp' field in the response object has a timestamp equal to 'nil'    
+
   Scenario: Checking values using field navigation
     Given an 'MultiUnaryRequest' that looks like the following
       """

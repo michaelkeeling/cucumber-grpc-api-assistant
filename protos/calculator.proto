@@ -5,6 +5,8 @@
 
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option objc_class_prefix = "CP";
 
 package calculator;
@@ -15,6 +17,7 @@ service Calculator {
     rpc BinaryOperation (BinaryRequest) returns (BinaryResponse) {}
     rpc Range (RangeRequest) returns (stream RangeResponse) {}
     rpc CurrentTime (Empty) returns (Timestamp) {}
+    rpc EchoTime (TimeRequest) returns (TimeResponse) {}
 }
 
 message UnaryRequest {
@@ -69,4 +72,12 @@ message Empty {
 
 message Timestamp {
     uint64 ms = 1;
+}
+
+message TimeRequest {
+    google.protobuf.Timestamp timestamp = 1;
+}
+
+message TimeResponse {
+    google.protobuf.Timestamp timestamp = 1;
 }

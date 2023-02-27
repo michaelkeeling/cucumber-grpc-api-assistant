@@ -71,6 +71,13 @@ class CalculatorService < Calculator::Calculator::Service
     Calculator::Timestamp.new(ms: (1000 * Time.now.to_f).to_i)
   end
 
+  def echo_time(request, _call)
+    @received_metadata = _call.metadata
+    Calculator::TimeResponse.new(
+      timestamp: request.timestamp
+    )
+  end
+
   def get_metadata(key)
     @received_metadata[key]
   end
