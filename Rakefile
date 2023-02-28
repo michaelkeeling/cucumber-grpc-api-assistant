@@ -1,7 +1,6 @@
-require 'yard'
 require 'rake/clean'
 
-task default: [:package_gem, :yard_task]
+task default: [:package_gem]
 task package_gem: [:test]
 task test: [:generate_grpc]
 
@@ -16,7 +15,7 @@ end
 task :generate_grpc do
   proto_dir = "./protos"
   dest_root = "generated/proto"
-  FileUtils.mkdir_p(dest_root) unless File.exists?(dest_root)
+  FileUtils.mkdir_p(dest_root) unless File.exist?(dest_root)
 
   command = "grpc_tools_ruby_protoc -I #{proto_dir} " \
             " --ruby_out=#{dest_root} --grpc_out=#{dest_root}" \
@@ -33,15 +32,6 @@ task :test do
   if $?.exitstatus != 0
     fail "Command #{command} failed!"
   end
-end
-
-task :yard do
-  Rake::Task["yard_task"].invoke
-end
-
-task :yard_task do
-  command = "yardoc --plugin yard-cucumber 'lib/**/*.rb' "
-  sh command
 end
 
 CLEAN.include 'logs'

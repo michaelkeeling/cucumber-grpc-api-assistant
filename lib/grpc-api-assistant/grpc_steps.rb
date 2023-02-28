@@ -1,3 +1,5 @@
+require 'time'
+
 Given 'the package prefix is {string}' do |package_prefix|
   @package_prefix = package_prefix
 end
@@ -133,6 +135,20 @@ end
 
 Then 'the {string} field in the response object has a timestamp at least {int} second(s) old' do |field_path, seconds|
   step "the '#{field_path}' field in the response object has a timestamp at least #{seconds * 1000} milliseconds old"
+end
+
+Then(/^the '(.+)' field in the response object has a timestamp equal to '(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)'$/) do |field_path, timestamp|
+  expect(@grpc_response).not_to be nil
+  expect(@grpc_response).not_to be_a(GRPC::BadStatus)
+  value = GrpcHelpers.fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value.seconds).to eq Time.parse(timestamp).to_i
+end
+
+Then(/^the '(.+)' field in the response object has a timestamp equal to 'nil'$/) do |field_path|
+  expect(@grpc_response).not_to be nil
+  expect(@grpc_response).not_to be_a(GRPC::BadStatus)
+  value = GrpcHelpers.fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value).to be nil
 end
 
 Then 'the {string} field in the response object is less than {int}' do |field_path, expected_value|

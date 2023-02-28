@@ -35,7 +35,7 @@ module GrpcApiAssistant
 
         log_to_file = (Helpers.get_env("log_to_file") || "true").downcase == true.to_s
         if log_to_file
-          Dir.mkdir(log_dir_name) unless File.exists?(log_dir_name)
+          Dir.mkdir(log_dir_name) unless File.exist?(log_dir_name)
           @@loggers << Logger.new("#{log_dir_name}/#{log_file_name}", "daily")
         end
 
