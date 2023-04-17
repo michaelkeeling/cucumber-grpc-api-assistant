@@ -36,3 +36,5 @@ Feature: Templates and Variables
     Then the 'result' field in the response object is -5
     And the value '-5' is saved in a key called 'expected'
     And the 'result' field in the response object is the same as the value stored in the key 'expected'
+    And the value '123456' is saved in a key called 'not expected'
+    And the 'result' field in the response object is not the same as the value stored in the key 'not expected'
