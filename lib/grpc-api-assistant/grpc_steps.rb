@@ -238,6 +238,12 @@ Then 'the {string} field in the response object is the same as the value stored 
   expect(value.to_s).to eq @stored_known_values[key_name].to_s
 end
 
+Then 'the {string} field in the response object is not the same as the value stored in the key {string}' do |field_path, key_name|
+  expect(@grpc_response).not_to be nil
+  value = GrpcHelpers.fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value.to_s).to_not eq @stored_known_values[key_name].to_s
+end
+
 Then 'the response stream has {int} message(s)' do |count|
   expect(@grpc_response).not_to be nil
   expect(@grpc_response.size).to eq count.to_i
