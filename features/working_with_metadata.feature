@@ -29,6 +29,7 @@ Feature: Working with Metadata
       | some_key          | key_number_1 |
       | another_key       | key_number_2 |
       | substituted_value | {anything}   |
+      | a_random_key      | {RANDOM()}   |
     When I call the 'unary_operation' method in the Calculator service
     Then the response object is not an error
     And the Calculator Testing Service receives metadata
@@ -36,3 +37,4 @@ Feature: Working with Metadata
       | some_key          | key_number_1 |
       | another_key       | key_number_2 |
       | substituted_value | ANY_DATA     |
+    And the Calculator Test Service received a GUID-shaped value in the 'a_random_key' metadata key
