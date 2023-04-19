@@ -27,14 +27,18 @@ Feature: Working with Metadata
     And the grpc metadata keys and values are set as
       | key               | value        |
       | some_key          | key_number_1 |
-      | another_key       | key_number_2 |
       | substituted_value | {anything}   |
       | a_random_key      | {RANDOM()}   |
+    And the grpc metadata key 'another_random_key' has a random value
+    And the grpc metadata key 'another_key' is 'key_number_2'
+    And the grpc metadata key 'another_substituted_value' is '{anything}'
     When I call the 'unary_operation' method in the Calculator service
     Then the response object is not an error
     And the Calculator Testing Service receives metadata
-      | key               | value        |
-      | some_key          | key_number_1 |
-      | another_key       | key_number_2 |
-      | substituted_value | ANY_DATA     |
+      | key                       | value        |
+      | some_key                  | key_number_1 |
+      | another_key               | key_number_2 |
+      | substituted_value         | ANY_DATA     |
+      | another_substituted_value | ANY_DATA     |
     And the Calculator Test Service received a GUID-shaped value in the 'a_random_key' metadata key
+    And the Calculator Test Service received a GUID-shaped value in the 'another_random_key' metadata key

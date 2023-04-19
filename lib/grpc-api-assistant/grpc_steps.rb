@@ -38,6 +38,16 @@ Given 'the grpc metadata keys and values are set as' do |table|
   end
 end
 
+Given 'the grpc metadata key {string} has a random value' do |key|
+  value = GrpcHelpers::instantiate_template("{RANDOM()}", @stored_known_values)
+  @grpc_metadata[key] = value
+end
+
+Given('the grpc metadata key {string} is {string}') do |key, value|
+  value = GrpcHelpers::instantiate_template(value, @stored_known_values)
+  @grpc_metadata[key] = value
+end
+
 Given 'an empty string is saved in a key called {string}' do |key|
   @stored_known_values[key] = ""
 end
