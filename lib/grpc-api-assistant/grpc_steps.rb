@@ -1,5 +1,3 @@
-require 'time'
-
 Given 'the package prefix is {string}' do |package_prefix|
   @package_prefix = package_prefix
 end
@@ -13,11 +11,14 @@ Given 'the value {int} is saved in a key called {string}' do |value, name|
 end
 
 Given 'the value {string} is saved in a key called {string}' do |value, name|
+  # This was in the initial version of the code, but it's a little odd given
+  # how other substitions now work.  Let's depreecate and eventualy remove.
   if value.downcase == "time.now"
+    GrpcApiAssistant::TestLogger.warn("DEPRECATION WARNING: 'time.now' is to be removed in a future release.  Please use '{CURRENT_TIME()}' instead.")
     value = Time.now.strftime("%s")
   end
 
-  @stored_known_values[name] = value.gsub("CURRENT_TIME()") { Time.now.utc.iso8601 }
+  @stored_known_values[name] = GrpcHelpers::instantiate_template(value, @stored_known_values)
 end
 
 Given 'a(n) {string} that looks like the following' do |message_name, json|
@@ -54,10 +55,6 @@ end
 
 Given 'the value from the key {string} is saved in a key called {string}' do |from_key, to_key|
   @stored_known_values[to_key] = @stored_known_values[from_key]
-end
-
-Given 'the value {string} is saved in a stored known values with a key called {string}' do |value, key|
-  @stored_known_values[key] = value
 end
 
 Given 'I wait {int} millisecond(s)' do |ms|
@@ -219,9 +216,6 @@ end
 Then 'the {string} field in the response object has a value in the list {StringList}' do |field_path, keys|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
-  # The key_name is a comma-delineated string holding an array of field names for the passage request.
-  # We can split on commas due to commas being illegal characters for Lucene and Elasticsearch field names.
-  # array = key_name.split(",")
   expect(keys).to include(value)
 end
 
