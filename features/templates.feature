@@ -15,7 +15,7 @@ Feature: Templates and Variables
   value for the key or, if an environment variable with the same name as the
   key is present, that value will be used instead.
 
-  Background:
+  Scenario: Call method with metadata and confirm metadata has been received
     Given the package prefix is 'Calculator::'
     And a key called 'foo' has a known value
     And a 'UnaryRequest' message template named 'the request' that looks like
@@ -28,8 +28,6 @@ Feature: Templates and Variables
     And the grpc metadata keys and values are set as
       | key    | value |
       | random | {foo} |
-
-  Scenario: Call method with metadata and confirm metadata has been received
     Given the value '5' is saved in a key called 'number'
     And the value '-' is saved in a key called 'operand'
     When I call the 'unary_operation' method in the Calculator service with the message template named 'the request'
