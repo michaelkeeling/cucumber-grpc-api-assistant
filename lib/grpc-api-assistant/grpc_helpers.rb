@@ -41,9 +41,8 @@ module GrpcHelpers
   end
 
   def self.instantiate_template(template, known_values)
-    result = template.gsub("{RANDOM()}") { SecureRandom.uuid }
+    result = template.gsub("{RANDOM()}") { SecureRandom.uuid }.gsub("{CURRENT_TIME()}") { Time.now.utc }
     known_values.each {|k, v| result = result.gsub("{" + k + "}", v.to_s)}
     result
   end
-
 end

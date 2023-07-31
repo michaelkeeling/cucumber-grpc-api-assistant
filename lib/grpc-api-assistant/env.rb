@@ -3,4 +3,4 @@ require 'bundler'
 
 Bundler.require(:default)
 
-require 'types'
+require 'time'

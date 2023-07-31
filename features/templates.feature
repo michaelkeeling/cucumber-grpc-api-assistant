@@ -38,3 +38,15 @@ Feature: Templates and Variables
     And the 'result' field in the response object is the same as the value stored in the key 'expected'
     And the value '123456' is saved in a key called 'not expected'
     And the 'result' field in the response object is not the same as the value stored in the key 'not expected'
+
+  Scenario: Substitute values in template variables
+    Given the value '{RANDOM()}' is saved in a key called 'random guid'
+    And the value '{CURRENT_TIME()}' is saved in a key called 'current time'
+    And the value 'any data' is saved in a key called 'anything'
+    And the value '{anything}' is saved in a key called 'copy of anything'
+    And the value 'time.now' is saved in a key called 'now'
+    Then the value stored in the key 'random guid' is a GUID-shaped value
+    And the value stored in the key 'current time' is close to the current time
+    And the value stored in the key 'anything' is 'any data'
+    And the value stored in the key 'copy of anything' is 'any data'
+    And the value stored in the key 'now' is close to the current time
