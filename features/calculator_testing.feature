@@ -34,6 +34,7 @@ Feature: Basic gRPC step functions
     When I call the 'unary_operation' method in the Calculator service
     Then the response object is not an error
     And the 'result' field in the response object has a value
+    And the 'some_missing_field' field in the response object does not have a value
     And the 'result' field in the response object is -6
     And the 'result' field in the response object is not 1234
     And the 'result' field in the response object is the same as the value stored in the key 'saved_value'
@@ -156,7 +157,7 @@ Feature: Basic gRPC step functions
       """
       {
         "timestamp": "2023-10-31T01:03:05Z"
-      }      
+      }
       """
     Then the 'timestamp' field in the response object has a timestamp equal to '2023-10-31T01:03:05Z'
 
@@ -164,9 +165,9 @@ Feature: Basic gRPC step functions
       """
       {
 
-      }      
+      }
       """
-    Then the 'timestamp' field in the response object has a timestamp equal to 'nil'    
+    Then the 'timestamp' field in the response object has a timestamp equal to 'nil'
 
   Scenario: Checking values using field navigation
     Given an 'MultiUnaryRequest' that looks like the following
@@ -187,3 +188,15 @@ Feature: Basic gRPC step functions
     And the 'results/0' field in the response object is '-1'
     And the 'results/0' field in the response object is not '1000'
     And the 'foo' field in the response object is empty
+
+  Scenario: Matcher for checking a list field does not have a value
+    Given an 'MultiUnaryRequest' that looks like the following
+      """
+      {
+        "xs": [],
+        "operand": "+"
+      }
+      """
+    When I call the 'multi_unary_operation' method in the Calculator service
+    Then the response object is not an error
+    And the 'results' field in the response object does not have a value
