@@ -111,6 +111,13 @@ Then 'the {string} field in the response object has a value' do |field_path|
   expect(value.empty?).to be false if value.respond_to?(:empty?)
 end
 
+Then 'the {string} field in the response object does not have a value' do |field_path|
+  expect(@grpc_response).not_to be nil
+  expect(@grpc_response).not_to be_a(GRPC::BadStatus)
+  value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
+  expect(value.nil? || (value.respond_to?(:empty?) && value.empty?)).to be true
+end
+
 Then 'the {string} field in the response object has {int} value(s)' do |field_path, count|
   expect(@grpc_response).not_to be nil
   value = GrpcHelpers::fetch_from_grpc_with_shorthand(field_path, @grpc_response)
