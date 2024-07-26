@@ -15,14 +15,14 @@ Gem::Specification.new do |spec|
 
   spec.files = `git ls-files`.split("\n")
   spec.require_paths = ["lib"]
-  spec.required_ruby_version = '>= 3.0.0'
+  spec.required_ruby_version = '>= 3.2.0'
   spec.license = 'MIT'
 
-  spec.add_dependency('grpc', '~> 1.52')
-  spec.add_dependency('grpc-tools', '~> 1.51')
-  spec.add_dependency('net-ssh', '~> 7.0')
+  spec.add_dependency('grpc', '~> 1.65')
+  spec.add_dependency('grpc-tools', '~> 1.65')
+  spec.add_dependency('net-ssh', '~> 7.2')
 
-  spec.add_dependency('cucumber', '~> 8.0')
+  spec.add_dependency('cucumber', '~> 9.2')
   spec.add_dependency('rspec-expectations', '~> 3.12')
 
   spec.add_development_dependency('rake', '~> 13.0')
