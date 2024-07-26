@@ -5,7 +5,7 @@ A set of Cucumber steps for testing gRPC services.
 Features
 
 - Steps for calling gRPC, including using variables
-- Steps for dynamically mananaging clients and hand rolled mocks
+- Steps for dynamically managing clients and hand rolled mocks
 - Templating system for reusing request templates
 - Developer-focused DSL, best suited for technical folks who actually use the APIs under test
 
@@ -28,7 +28,7 @@ Running the default Rake task will test and package the gem.
 Setup
 
 1. Modify your Rakefile to generate the protobuf files. There is an example task in this project's Rakefile.
-2. Include the generated ruby protbufs. This can be done by unshifting the path where the generated protobufs landed
+2. Include the generated ruby protobufs. This can be done by unshifting the path where the generated protobufs landed
    and then including the `*_services_pb` files. Here's an example from the tests for this project, found in
    `features/support/env.rb`
 
