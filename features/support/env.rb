@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.unshift 'generated/proto'
 
 require 'grpc-api-assistant'

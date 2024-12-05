@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake/clean'
 
 task default: [:package_gem]
@@ -5,33 +7,27 @@ task package_gem: [:test]
 task test: [:generate_grpc]
 
 task :package_gem do
-  command = "gem build grpc-api-assistant.gemspec"
+  command = 'gem build grpc-api-assistant.gemspec'
   sh command
-  if $?.exitstatus != 0
-    fail "Command #{command} failed"
-  end
+  raise "Command #{command} failed" if $?.exitstatus != 0
 end
 
 task :generate_grpc do
-  proto_dir = "./protos"
-  dest_root = "generated/proto"
+  proto_dir = './protos'
+  dest_root = 'generated/proto'
   FileUtils.mkdir_p(dest_root) unless File.exist?(dest_root)
 
   command = "grpc_tools_ruby_protoc -I #{proto_dir} " \
             " --ruby_out=#{dest_root} --grpc_out=#{dest_root}" \
-            " #{Dir.glob(proto_dir + '/**/*.proto').join(' ')}"
+            " #{Dir.glob("#{proto_dir}/**/*.proto").join(' ')}"
   sh command
-  if $?.exitstatus != 0
-    fail "gRPC command failed: #{command}"
-  end
+  raise "gRPC command failed: #{command}" if $?.exitstatus != 0
 end
 
 task :test do
-  command = "cucumber"
+  command = 'cucumber'
   sh command
-  if $?.exitstatus != 0
-    fail "Command #{command} failed!"
-  end
+  raise "Command #{command} failed!" if $?.exitstatus != 0
 end
 
 CLEAN.include 'logs'

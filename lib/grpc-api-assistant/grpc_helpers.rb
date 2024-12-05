@@ -1,31 +1,33 @@
+# frozen_string_literal: true
+
 require 'grpc-api-assistant/test_logger'
 
 module GrpcHelpers
   LOGGER = GrpcApiAssistant::TestLogger
 
   def self.create_message(message_name, template, template_values)
-    json = self.instantiate_template(template, template_values)
+    json = instantiate_template(template, template_values)
     LOGGER.debug json
-    Object::const_get(message_name).decode_json(json)
+    Object.const_get(message_name).decode_json(json)
   end
 
   def self.create_array(message_name, array_json, template_values)
-    json = self.instantiate_template(array_json, template_values)
+    json = instantiate_template(array_json, template_values)
     array = JSON.parse(json, symbolize_names: true)
-    array.map { |hash| Object::const_get(message_name).decode_json(JSON.generate(hash)) }
+    array.map { |hash| Object.const_get(message_name).decode_json(JSON.generate(hash)) }
   end
 
   def self.call(client, method, request, metadata)
-    metadata = {:metadata => metadata}
+    metadata = { metadata: }
     response = client.method(method.to_sym).call(request, metadata)
     LOGGER.debug response
     response.respond_to?(:to_a) ? response.to_a : response
-  rescue => error
-    error
+  rescue StandardError => e
+    e
   end
 
   def self.fetch_from_grpc_with_shorthand(field_path, message)
-    fields = field_path.split("/")
+    fields = field_path.split('/')
     value = message
     fields.each do |f|
       f = f.to_i if f.to_i.to_s == f
@@ -43,7 +45,7 @@ module GrpcHelpers
   def self.instantiate_template(template, known_values)
     result = template
     known_values.each do |k, v|
-      result = result.gsub("{" + k + "}", v.class == Proc ? v.call.to_s : v.to_s)
+      result = result.gsub('{' + k + '}', v.class == Proc ? v.call.to_s : v.to_s)
     end
 
     result
