@@ -8,20 +8,18 @@ module GrpcApiAssistant
       end
 
       def initialize
-        @servers = Hash.new
+        @servers = {}
       end
 
       def add_server(server_name, server)
-        if @servers.key? server_name
-          raise "already added a server by this name #{server_name}"
-        end
+        raise "already added a server by this name #{server_name}" if @servers.key? server_name
+
         @servers[server_name] = server
       end
 
       def get_server(server_name)
-        unless @servers.key?(server_name)
-          raise "the stored servers does not have the key #{server_name}"
-        end
+        raise "the stored servers does not have the key #{server_name}" unless @servers.key?(server_name)
+
         @servers[server_name]
       end
 

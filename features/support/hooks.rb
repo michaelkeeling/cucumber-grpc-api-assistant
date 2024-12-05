@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Before do |scenario|
+Before do |_scenario|
   calculator_service = GrpcApiAssistant::ServiceManager.services.add_service(
     'Calculator',       # The name you plan to use to reference the service from within test steps
     'CalculatorService' # This is the name of the generated gRPC service
@@ -18,7 +18,7 @@ Before do |scenario|
 
   calculator_server = GrpcApiAssistant::InsecureServer.new(
     '0.0.0.0',
-    12345,
+    12_345,
     *calculator_service
   )
 
@@ -44,7 +44,7 @@ Before do |scenario|
     'Calculator',
     '::Calculator::Calculator',
     'localhost',
-    12345
+    12_345
   )
 end
 
@@ -55,7 +55,7 @@ Before('@no_server_services_clients') do
   GrpcApiAssistant::InsecureServer.stop_all
 end
 
-After do |scenario|
+After do |_scenario|
   GrpcApiAssistant::ClientManager.clients.remove_all_clients
   GrpcApiAssistant::ServiceManager.services.remove_all_services
   GrpcApiAssistant::ServerManager.servers.remove_all_servers

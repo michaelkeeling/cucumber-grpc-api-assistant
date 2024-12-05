@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'grpc-api-assistant/parameter_types'
 require 'grpc-api-assistant/client_utils_steps'
 require 'grpc-api-assistant/grpc_helpers'

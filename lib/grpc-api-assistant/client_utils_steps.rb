@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given 'I remove the client with name {string}' do |client_name|
   GrpcApiAssistant::ClientManager.clients.remove_client(client_name)
 end
@@ -32,13 +34,13 @@ end
 
 When 'I add a client with name {string}, package name {string}, host {string}, port {int}, service_endpoint {string}, cred {string}, and channel {string}' \
 do |service_name, package_name, host, port, service_endpoint, cred, chan|
-  GrpcApiAssistant::ClientManager.clients.add_client(service_name, package_name, host, port, service_endpoint, cred, chan)
+  GrpcApiAssistant::ClientManager.clients.add_client(service_name, package_name, host, port, service_endpoint, cred,
+                                                     chan)
 end
 
 When 'I add a client with name {string}, package name {string}, host {string}, port {int}' do |service_name, package_name, host, port|
-    GrpcApiAssistant::ClientManager.clients.add_client(service_name, package_name, host, port)
+  GrpcApiAssistant::ClientManager.clients.add_client(service_name, package_name, host, port)
 end
-
 
 Then 'there are no clients stored' do
   expect(GrpcApiAssistant::ClientManager.clients.get_clients.empty?).to be true
@@ -49,19 +51,17 @@ Then 'the client with name {string} is stored in the clients' do |client_name|
 end
 
 Then 'the client with name {string} is not stored in the clients' do |client_name|
-  begin
-    expect(GrpcApiAssistant::ClientManager.clients.get_client(client_name))
-      # This method in ClientUtils module throws an error if the 'client'
-      # is not stored and there is an attempt to retrieve the client.
-  rescue => error
-    expect(error.to_s).to eq("No client for the given service: #{client_name}")
-  else
-    expect(true).to be false
-  end
+  expect(GrpcApiAssistant::ClientManager.clients.get_client(client_name))
+# This method in ClientUtils module throws an error if the 'client'
+# is not stored and there is an attempt to retrieve the client.
+rescue StandardError => e
+  expect(e.to_s).to eq("No client for the given service: #{client_name}")
+else
+  expect(true).to be false
 end
 
-Then 'there is 1 client stored' do |count|
-  step "there are 1 clients stored"
+Then 'there is 1 client stored' do |_count|
+  step 'there are 1 clients stored'
 end
 
 Then 'there are {int} client(s) stored' do |count|
@@ -77,19 +77,17 @@ Then 'the service with name {string} is stored in services' do |service_name|
 end
 
 Then 'the service with name {string} is not stored in the services' do |service_name|
-  begin
-    expect(GrpcApiAssistant::ServiceManager.services.get_service(service_name))
-      # This method in ClientUtils module throws an error if the 'service'
-      # is not stored and there is an attempt to retrieve the service.
-  rescue => error
-    expect(error.to_s).to eq("the stored services does not have the key #{service_name}")
-  else
-    expect(true).to be false
-  end
+  expect(GrpcApiAssistant::ServiceManager.services.get_service(service_name))
+# This method in ClientUtils module throws an error if the 'service'
+# is not stored and there is an attempt to retrieve the service.
+rescue StandardError => e
+  expect(e.to_s).to eq("the stored services does not have the key #{service_name}")
+else
+  expect(true).to be false
 end
 
-Then 'there is 1 service stored' do |count|
-  step "there are 1 services stored"
+Then 'there is 1 service stored' do |_count|
+  step 'there are 1 services stored'
 end
 
 Then 'there are {int} service(s) stored' do |count|
@@ -101,19 +99,17 @@ Then 'the server with name {string} is stored in server' do |server_name|
 end
 
 Then 'the server with name {string} is not stored in the servers' do |server_name|
-  begin
-    expect(GrpcApiAssistant::ServerManager.servers.get_server(server_name))
-      # This method in ClientUtils module throws an error if the 'server'
-      # is not stored and there is an attempt to retrieve the server.
-  rescue => error
-    expect(error.to_s).to eq("the stored servers does not have the key #{server_name}")
-  else
-    expect(true).to be false
-  end
+  expect(GrpcApiAssistant::ServerManager.servers.get_server(server_name))
+# This method in ClientUtils module throws an error if the 'server'
+# is not stored and there is an attempt to retrieve the server.
+rescue StandardError => e
+  expect(e.to_s).to eq("the stored servers does not have the key #{server_name}")
+else
+  expect(true).to be false
 end
 
 Then 'there is 1 server stored' do
-  step "there are 1 servers stored"
+  step 'there are 1 servers stored'
 end
 
 Then 'there are {int} server(s) stored' do |count|

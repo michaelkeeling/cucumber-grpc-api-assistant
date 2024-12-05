@@ -8,18 +8,18 @@ module GrpcApiAssistant
       end
 
       def initialize
-        @grpc_clients = Hash.new
+        @grpc_clients = {}
       end
 
       # TODO: add an insecure client version too
-      def add_client(service_name, package_name, host, port, service_endpoint=nil, cred=nil, chan=nil)
+      def add_client(service_name, package_name, host, port, service_endpoint = nil, cred = nil, chan = nil)
         raise "A client for the service, #{service_name}, already exists!" if @grpc_clients.key? service_name
 
         service_endpoint = "#{host}:#{port}" if service_endpoint.nil?
 
         if !cred.nil? && !chan.nil?
-          channel_args = {GRPC::Core::Channel::SSL_TARGET => chan}
-          opts = Hash.new
+          channel_args = { GRPC::Core::Channel::SSL_TARGET => chan }
+          opts = {}
           opts[:channel_args] = channel_args
 
           @grpc_clients[service_name] = Object.const_get(package_name)::Stub.new(
@@ -34,9 +34,7 @@ module GrpcApiAssistant
       end
 
       def get_client(service_name)
-        if !@grpc_clients.key? service_name
-          raise "No client for the given service: #{service_name}"
-        end
+        raise "No client for the given service: #{service_name}" unless @grpc_clients.key? service_name
 
         @grpc_clients[service_name]
       end

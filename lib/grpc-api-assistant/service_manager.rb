@@ -8,22 +8,18 @@ module GrpcApiAssistant
       end
 
       def initialize
-        @services = Hash.new
+        @services = {}
       end
 
       def add_service(service_name, service_double)
-        if @services.key? service_name
-          raise "already added a service by this name #{service_name}"
-        end
+        raise "already added a service by this name #{service_name}" if @services.key? service_name
 
         @services[service_name] = Object.const_get(service_double).new
         @services[service_name]
       end
 
       def get_service(service_name)
-        unless @services.key? service_name
-          raise "the stored services does not have the key #{service_name}"
-        end
+        raise "the stored services does not have the key #{service_name}" unless @services.key? service_name
 
         @services[service_name]
       end
@@ -48,6 +44,5 @@ module GrpcApiAssistant
         Services.instance
       end
     end
-
   end
 end
